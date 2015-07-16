@@ -1,0 +1,57 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+
+    <services>
+        <service id="data_loader_service" class="TestDataLoaderBundle\Service\DataLoader">
+            <argument type="service" id="buzz_adapter" />
+            <argument type="service" id="response_factory" />
+            <argument type="service" id="parser_json" />
+            <argument type="service" id="data_normalizer" />
+            <argument>%target_url%</argument>
+        </service>
+
+        <service id="buzz_adapter" class="TestDataLoaderBundle\Service\BuzzAdapter\BuzzAdapter">
+            <argument type="service" id="buzz" />
+        </service>
+
+        <service id="parser_json" class="TestDataLoaderBundle\Service\Parser\ParserJSON">
+        </service>
+
+        <service id="response_factory" class="TestDataLoaderBundle\Service\Response\ResponseFactory">
+            <argument type="service" id="response_validator" />
+        </service>
+
+        <!-- validators -->
+        <service id="data_validator" class="TestDataLoaderBundle\Service\Validator\DataValidator">
+        </service>
+
+        <service id="response_validator" class="TestDataLoaderBundle\Service\Validator\ResponseValidator">
+        </service>
+
+        <service id="location_validator" class="TestDataLoaderBundle\Service\Validator\LocationValidator">
+        </service>
+
+        <service id="coordinates_validator" class="TestDataLoaderBundle\Service\Validator\CoordinatesValidator">
+        </service>
+
+        <!-- normalizers -->
+        <service id="data_normalizer" class="TestDataLoaderBundle\Service\Normalizer\DataNormalizer">
+            <argument type="service" id="data_validator" />
+            <argument type="service" id="location_normalizer" />
+        </service>
+
+        <service id="location_normalizer" class="TestDataLoaderBundle\Service\Normalizer\LocationNormalizer">
+            <argument type="service" id="location_validator" />
+            <argument type="service" id="coordinates_normalizer" />
+        </service>
+
+        <service id="coordinates_normalizer" class="TestDataLoaderBundle\Service\Normalizer\CoordinatesNormalizer">
+            <argument type="service" id="coordinates_validator" />
+        </service>
+    </services>
+
+</container>
